@@ -1,0 +1,17 @@
+{
+  "data": [
+    {
+      "firstName" : "Jake",
+      "lastName" : "Peralta",
+      "postalCode" : "677878"
+    },
+
+    {
+      "firstName" : "Andrew",
+      "lastName" : "Lex",
+      "postalCode" : "788989"
+    }
+
+  ]
+
+}
