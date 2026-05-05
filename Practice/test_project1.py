@@ -40,17 +40,33 @@ def test_project(browser, test_one):
     driver.find_element(By.CSS_SELECTOR, "input[class='submit-button btn_action']").click()
 
 
-    price = driver.find_elements(By.XPATH, "//div[@class='pricebar']")
+    prices = driver.find_elements(By.XPATH, "//div[@class='inventory_item_price']")
+    target = "$15.99"
 
-    for a in price:
-        if a.find_element(By.XPATH, "//div[@class='pricebar']/div").text == "$15.99":
-            a.find_element(By.XPATH, "//div[@class='pricebar']/button").click()
+    expected_count = 0
+    for b in prices:
+        if b.text == target:
+            expected_count += 1
+            # go to parent (inventory_item) and click its button
+            b.find_element(By.XPATH, "./ancestor::div[@class='inventory_item']//button").click()
 
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "shopping_cart_link")))
+
+#After clicking on the checkout
     driver.find_element(By.CSS_SELECTOR, "a[class='shopping_cart_link']").click()
+#Assertion of the items clicked
+    cart_items = driver.find_elements(By.CLASS_NAME, "inventory_item_price")
+    #Count Validation
+    assert len(cart_items) == expected_count
+    #Price Validation
+    for item in cart_items:
+        assert item.text == "$15.99"
+
     driver.find_element(By.ID, "checkout").click()
     driver.find_element(By.ID, "first-name").send_keys(test_one["firstName"])
     driver.find_element(By.ID, "last-name").send_keys(test_one["lastName"])
     driver.find_element(By.ID, "postal-code").send_keys(test_one["postalCode"])
     driver.find_element(By.ID, "continue").click()
     driver.find_element(By.ID, "finish").click()
+
     assert "order" in driver.find_element(By.CSS_SELECTOR, "h2").text
