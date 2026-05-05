@@ -69,4 +69,4 @@ def test_project(browser, test_one):
     driver.find_element(By.ID, "continue").click()
     driver.find_element(By.ID, "finish").click()
 
-    assert "order" in driver.find_element(By.CSS_SELECTOR, "h2").text
+    assert "order" in S
